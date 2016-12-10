@@ -1,4 +1,9 @@
 <?php
+if(!defined('MyConst2')) {
+   die('Direct access not permitted');
+}
+?>
+<?php
 function pristup($servername, $username, $password, $dbname, $sql){
 
 	$conn=new mysqli($servername, $username, $password, $dbname);
@@ -77,6 +82,25 @@ function proveras($prom){
      $prom = test_input($prom);
      if (!preg_match("/^[a-zA-Z0-9 ]*$/",$prom)) {
        $niz["err"] = "Dozvoljena su slova, brojevi i prazna mesta."; 
+	   $niz["prom"] ="";
+	   $niz["greska"]++;
+     }
+	 $niz["prom"]= $prom;
+   }
+	return $niz;
+}
+
+function proverab($prom){
+	
+	$niz=array("err"=>"","prom"=>"","greska"=>0);
+	if (empty($prom)) {
+     $niz["err"] = "Potrebno je uneti broj.";
+	 $niz["prom"] ="";
+	 $niz["greska"]++;
+   } else {
+     $prom = test_input($prom);
+     if (!preg_match("/^[0-9 ]*$/",$prom)) {
+       $niz["err"] = "Dozvoljeni su samo brojevi."; 
 	   $niz["prom"] ="";
 	   $niz["greska"]++;
      }
