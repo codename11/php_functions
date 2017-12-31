@@ -28,6 +28,7 @@ class SimpleDB{
         return $result;
     }
 	
+	//Function that executes multiple queries.
 	function multi_execute($sql_query){
 
 		$result = $this->conn->multi_query($sql_query);
@@ -52,7 +53,7 @@ class Validation{
         $this->data = $par;
     }
 
-	public function getData() { //Getovanje vrednosti za naziv servera.
+	public function getData() { //Getting data.
         return $this->data;
     }
 	
@@ -60,6 +61,7 @@ class Validation{
         $this->data;
     }
 	
+	//Functions that check form inputs.
 	function test_input($par) {
 		$par = trim($par);
 		$par = stripslashes($par);
