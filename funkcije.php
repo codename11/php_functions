@@ -1,112 +1,71 @@
 <?php
-if(!defined('MyConst2')) {
-   die('Direct access not permitted');
-}
-?>
-<?php
-function pristup($servername, $username, $password, $dbname, $sql){
 
-	$conn=new mysqli($servername, $username, $password, $dbname);
+class SimpleDB{
+    private $conn;
+
+    // hide all data inside class instance
+    public function __construct($server_name, $user_name, $password, $db_name){
+        $this->conn=new mysqli($server_name, $user_name, $password, $db_name);
+
+        if($this->conn->connect_error){
+            die("ERROR: " . $this->conn->connect_error);
+        }
+    }
+
+    function __destruct() {
+        $this->conn->close();
+    }
+
+    //Function that executes query.
+    public function execute($sql_query){
+        $result = $this->conn->query($sql_query);
+        if ($result == TRUE){
+            echo "Connection success";
+        } else {
+            echo "Connection fail: " . $conn->error;
+        }
+
+        return $result;
+    }
 	
-	if($conn->connect_error){
+	function multi_execute($sql_query){
+
+		$result = $this->conn->multi_query($sql_query);
+		if ($result === TRUE) {
+			echo "New records created successfully";
+		} 
+		else {
+			echo "Error: " . $sql_query . "</br>" . $conn->error;
+		}
+		
+		return $result;
+
+	}
+
+}
+
+class Validation{
 	
-		die("Neuspela konekcija: ".$conn->connect_error);
+	private $data;
 	
+	public function __construct($par){
+        $this->data = $par;
+    }
+
+	public function getData() { //Getovanje vrednosti za naziv servera.
+        return $this->data;
+    }
+	
+    function __destruct() {
+        $this->data;
+    }
+	
+	function test_input($par) {
+		$par = trim($par);
+		$par = stripslashes($par);
+		$par = htmlspecialchars($par);
+		return $par;
 	}
 	
-	$result = $conn->query($sql);
-	if ($result == TRUE) {
-    echo "Uspela konekcija";
-} else {
-    echo "Neuspela konekcija: " . $conn->error;
 }
-	return $result;
-
-	$conn->close();
-	
-}
-
-function test_input($data) {
-   $data = trim($data);
-   $data = stripslashes($data);
-   $data = htmlspecialchars($data);
-   return $data;
-}
-
-function proverai($prom){
-	
-	$niz=array("err"=>"","prom"=>"","greska"=>0);
-	if (empty($prom)) {
-     $niz["err"] = "Potrebno je uneti ime ili prezime.";
-	 $niz["prom"] ="";
-	 $niz["greska"]++;
-   } else {
-     $prom = test_input($prom);
-     if (!preg_match("/^[a-zA-Z ]*$/",$prom)) {
-       $niz["err"] = "Dozvoljena su samo slova i prazna mesta."; 
-	   $niz["prom"] ="";
-	   $niz["greska"]++;
-     }
-	 $niz["prom"] =$prom;
-   }
-	return $niz;
-}
-
-function proverae($prom){
-	
-	$niz=array("err"=>"","prom"=>"","greska"=>0);
-	if (empty($prom)) {
-     $niz["err"] = "Potrebno je uneti email.";
-	 $niz["prom"] ="";
-	 $niz["greska"]++;
-   } else {
-     $prom = test_input($prom);
-     if (!filter_var($prom, FILTER_VALIDATE_EMAIL)) {
-       $niz["err"] = "Nepravilno unet email."; 
-	   $niz["prom"] ="";
-	   $niz["greska"]++;
-     }
-	 $niz["prom"] =$prom;
-   }
-	return $niz;
-}
-
-function proveras($prom){
-	
-	$niz=array("err"=>"","prom"=>"","greska"=>0);
-	if (empty($prom)) {
-     $niz["err"] = "Potrebno je uneti sifru.";
-	 $niz["prom"] ="";
-	 $niz["greska"]++;
-   } else {
-     $prom = test_input($prom);
-     if (!preg_match("/^[a-zA-Z0-9 ]*$/",$prom)) {
-       $niz["err"] = "Dozvoljena su slova, brojevi i prazna mesta."; 
-	   $niz["prom"] ="";
-	   $niz["greska"]++;
-     }
-	 $niz["prom"]= $prom;
-   }
-	return $niz;
-}
-
-function proverab($prom){
-	
-	$niz=array("err"=>"","prom"=>"","greska"=>0);
-	if (empty($prom)) {
-     $niz["err"] = "Potrebno je uneti broj.";
-	 $niz["prom"] ="";
-	 $niz["greska"]++;
-   } else {
-     $prom = test_input($prom);
-     if (!preg_match("/^[0-9 ]*$/",$prom)) {
-       $niz["err"] = "Dozvoljeni su samo brojevi."; 
-	   $niz["prom"] ="";
-	   $niz["greska"]++;
-     }
-	 $niz["prom"]= $prom;
-   }
-	return $niz;
-}
-
 ?>
