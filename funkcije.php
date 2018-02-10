@@ -16,11 +16,11 @@ class SimpleDB{
         $this->conn->close();
     }
 
-    //Function that executes query.
+    //Function that executes single query.
     public function execute($sql_query){
         $result = $this->conn->query($sql_query);
         if ($result == TRUE){
-            echo "Connection success";
+            //echo "Connection success";
         } else {
             echo "Connection fail: " . $conn->error;
         }
@@ -32,7 +32,7 @@ class SimpleDB{
 	function multi_execute($sql_query){
 
 		$result = $this->conn->multi_query($sql_query);
-		if ($result === TRUE) {
+		if ($result == TRUE) {
 			echo "New records created successfully";
 		} 
 		else {
@@ -67,6 +67,10 @@ class Validation{
 		$par = stripslashes($par);
 		$par = htmlspecialchars($par);
 		return $par;
+	}
+	
+	function isEmail($par) {
+		return filter_var($par, FILTER_VALIDATE_EMAIL);
 	}
 	
 }
